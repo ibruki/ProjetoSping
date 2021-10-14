@@ -14,9 +14,12 @@ public class StudentResponse {
 
     private String email;
 
+    public String fullName;
+
     public StudentResponse (Student student){
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();
         this.email = student.getEmail();
+        this.fullName = student.getFirstName() + " " + student.getLastName();
     }
 }

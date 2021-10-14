@@ -9,6 +9,7 @@ import com.example.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +93,26 @@ public class StudentController {
         return studentResponseList;
     }
 
+    @GetMapping("/like/{firstName}")
+    public List<StudentResponse> getAllLike(@PathVariable String firstName){
+        List<Student> studentList = studentService.getAllLike(firstName);
+        List<StudentResponse> studentResponseList = new ArrayList<>();
+
+        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse(student)));
+
+        return studentResponseList;
+    }
+
+    @GetMapping("/startsWith/{firstName}")
+    public List<StudentResponse> getStartsWith(@PathVariable String firstName){
+        List<Student> studentList = studentService.getAllWhoStartsWith(firstName);
+        List<StudentResponse> studentResponseList = new ArrayList<>();
+
+        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse(student)));
+
+        return studentResponseList;
+    }
+
     @PostMapping("/create")
     public StudentResponse createStudent(@Valid @RequestBody CreateStudentRequest createStudentRequest){
         Student student = studentService.createStudent(createStudentRequest);
@@ -104,6 +125,11 @@ public class StudentController {
         Student student = studentService.updateStudent(updateStudentRequest);
 
         return new StudentResponse(student);
+    }
+
+    @PutMapping("/updateFirstName/{id}/{firstName}")
+    public String updateStudentWithJpql(@PathVariable Long id, @PathVariable String firstName){
+        return studentService.updateStudentWithJpql(id, firstName) + " Student(s) updated";
     }
 
 //    @DeleteMapping("/delete")              DELETE POR PARAMETRO
