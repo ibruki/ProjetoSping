@@ -1,6 +1,8 @@
 package com.example.service;
 
+import com.example.entity.Address;
 import com.example.entity.Student;
+import com.example.repository.AddressRepository;
 import com.example.repository.StudentRepository;
 import com.example.request.CreateStudentRequest;
 import com.example.request.InQueryRequest;
@@ -17,12 +19,19 @@ public class StudentService {
 
     StudentRepository studentRepository;
 
-    public StudentService (StudentRepository studentRepository){
+    AddressRepository addressRepository;
+
+    public StudentService (StudentRepository studentRepository, AddressRepository addressRepository){
         this.studentRepository = studentRepository;
+        this.addressRepository = addressRepository;
     }
 
     public Optional<Student> getById(Long id){
         return studentRepository.findById(id);
+    }
+
+    public List<Student> getByCity(String city){
+        return studentRepository.findByAddressCity(city);
     }
 
     public Student getByFirstNameAndLastName(String firstName, String lastName){
@@ -49,7 +58,13 @@ public class StudentService {
     }
 
     public Student createStudent (CreateStudentRequest createStudentRequest){
-         return studentRepository.save(new Student(createStudentRequest));
+        Student student = new Student(createStudentRequest);
+        student.setAddress
+                (addressRepository.save
+                        (new Address
+                                (createStudentRequest.getStreet(), createStudentRequest.getCity())));
+
+        return studentRepository.save(student);
     }
 
     public List<Student> getAllStudentsWithSorting(String sort, String sortOrder){
@@ -83,6 +98,10 @@ public class StudentService {
     public String deleteStudent(long id){
         studentRepository.deleteById(id);
         return "Estudante foi apagado com sucesso.";
+    }
+
+    public Integer deleteStudentWithJpql(String firstName){
+        return studentRepository.deleteByFirstName(firstName);
     }
 
     public List<Student> getByFirstName(String firstName){

@@ -26,11 +26,22 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findByFirstNameStartsWith(String firstName);
 
-    @Query("From Student where firstName = :firstName and lastName = :lastName")
+    @Query("FROM Student WHERE firstName = :firstName AND lastName = :lastName")
     Student getByLastNameAndFirstName(@Param("firstName") String primeiroNome, String lastName);
 
     @Modifying
     @Transactional
     @Query("Update Student set firstName = :firstName where id = :id")
     Integer updateFirstName(Long id, String firstName);
+
+    List<Student> findByAddressCity (String city);
+
+    //mesma coisa que o findByAddressCity mas dessa vez usando JPQL
+    @Query("From Student where address.city = :city")
+    List<Student> getByAddressCity (String city);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Student WHERE firstName = :firstName")
+    Integer deleteByFirstName(String firstName);
 }

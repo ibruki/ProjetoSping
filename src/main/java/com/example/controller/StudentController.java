@@ -9,7 +9,6 @@ import com.example.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class StudentController {
         List<Student> studentList = studentService.getByFirstName(firstName);
         List<StudentResponse> studentResponseList = new ArrayList<>();
 
-        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse((student))));
+        studentList.forEach(student -> studentResponseList.add(new StudentResponse((student))));
         return studentResponseList;
     }
 
@@ -49,7 +48,7 @@ public class StudentController {
         List<Student> studentList = studentService.getByFirstNameOrLastName(firstName, lastName);
         List<StudentResponse> studentResponseList = new ArrayList<>();
 
-        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse(student)));
+        studentList.forEach(student -> studentResponseList.add(new StudentResponse(student)));
         return studentResponseList;
     }
 
@@ -58,7 +57,16 @@ public class StudentController {
         List<Student> studentList = studentService.getByFirstNameIn(inQueryRequest);
         List<StudentResponse> studentResponseList = new ArrayList<>();
 
-        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse(student)));
+        studentList.forEach(student -> studentResponseList.add(new StudentResponse(student)));
+        return studentResponseList;
+    }
+
+    @GetMapping("/getByCity/{city}")
+    public List<StudentResponse> getByCity(@PathVariable String city){
+        List<Student> studentList = studentService.getByCity(city);
+        List<StudentResponse> studentResponseList = new ArrayList<>();
+
+        studentList.forEach(student -> studentResponseList.add(new StudentResponse(student)));
         return studentResponseList;
     }
 
@@ -68,7 +76,7 @@ public class StudentController {
         List<Student> studentList = studentService.getAllStudents();
         List<StudentResponse> studentResponseList = new ArrayList<>();
 
-        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse((student))));
+        studentList.forEach(student -> studentResponseList.add(new StudentResponse((student))));
 
         return studentResponseList;
     }
@@ -98,7 +106,7 @@ public class StudentController {
         List<Student> studentList = studentService.getAllLike(firstName);
         List<StudentResponse> studentResponseList = new ArrayList<>();
 
-        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse(student)));
+        studentList.forEach(student -> studentResponseList.add(new StudentResponse(student)));
 
         return studentResponseList;
     }
@@ -108,7 +116,7 @@ public class StudentController {
         List<Student> studentList = studentService.getAllWhoStartsWith(firstName);
         List<StudentResponse> studentResponseList = new ArrayList<>();
 
-        studentList.stream().forEach(student -> studentResponseList.add(new StudentResponse(student)));
+        studentList.forEach(student -> studentResponseList.add(new StudentResponse(student)));
 
         return studentResponseList;
     }
@@ -142,5 +150,9 @@ public class StudentController {
         return studentService.deleteStudent(id);
     }
 
+    @DeleteMapping("/deleteByFirstName/{firstName}")
+    public String deleteStudentByFirstName(@PathVariable String firstName){
+        return studentService.deleteStudentWithJpql(firstName) + "Student(s) deleted.";
+    }
 
 }
