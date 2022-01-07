@@ -1,16 +1,21 @@
-package com.example.service;
+package com.example.springdemo.core.service;
 
-import com.example.entity.Address;
-import com.example.entity.Student;
-import com.example.repository.AddressRepository;
-import com.example.repository.StudentRepository;
-import com.example.request.CreateStudentRequest;
-import com.example.request.InQueryRequest;
-import com.example.request.UpdateStudentRequest;
+import com.example.springdemo.core.entity.Address;
+import com.example.springdemo.core.repository.AddressRepository;
+import com.example.springdemo.core.entity.Student;
+import com.example.springdemo.core.entity.Subject;
+import com.example.springdemo.core.repository.StudentRepository;
+import com.example.springdemo.core.repository.SubjectRepository;
+import com.example.springdemo.core.request.CreateStudentRequest;
+import com.example.springdemo.core.request.CreateSubjectRequest;
+import com.example.springdemo.core.request.InQueryRequest;
+import com.example.springdemo.core.request.UpdateStudentRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +23,13 @@ import java.util.Optional;
 public class StudentService {
 
     StudentRepository studentRepository;
-
     AddressRepository addressRepository;
+    SubjectRepository subjectRepository;
 
-    public StudentService (StudentRepository studentRepository, AddressRepository addressRepository){
+    public StudentService (StudentRepository studentRepository, AddressRepository addressRepository, SubjectRepository subjectRepository){
         this.studentRepository = studentRepository;
         this.addressRepository = addressRepository;
+        this.subjectRepository = subjectRepository;
     }
 
     public Optional<Student> getById(Long id){
@@ -57,6 +63,7 @@ public class StudentService {
         return studentRepository.findAll(pageRequest).getContent();
     }
 
+    @Transactional
     public Student createStudent (CreateStudentRequest createStudentRequest){
         Student student = new Student(createStudentRequest);
         student.setAddress
@@ -64,7 +71,24 @@ public class StudentService {
                         (new Address
                                 (createStudentRequest.getStreet(), createStudentRequest.getCity())));
 
-        return studentRepository.save(student);
+        student = studentRepository.save(student);
+
+        List<Subject> subjectsList = new ArrayList<>();
+        if(createStudentRequest.getLearningSubjects() != null) {
+            for (CreateSubjectRequest subjectRequest : createStudentRequest.getLearningSubjects()) {
+                Subject subject = new Subject();
+                subject.setSubject_name(subjectRequest.getSubject_name());
+                subject.setMarks_obtained(subjectRequest.getMarksObtained());
+                subject.setStudent(student);
+
+                subjectsList.add(subject);
+            }
+            subjectRepository.saveAll(subjectsList);
+        }
+
+        student.setLearningSubjects(subjectsList);
+
+        return student;
     }
 
     public List<Student> getAllStudentsWithSorting(String sort, String sortOrder){

@@ -1,11 +1,13 @@
-package com.example.controller;
+package com.example.springdemo.core.controller;
 
-import com.example.entity.Student;
-import com.example.request.CreateStudentRequest;
-import com.example.request.InQueryRequest;
-import com.example.request.UpdateStudentRequest;
-import com.example.response.StudentResponse;
-import com.example.service.StudentService;
+import com.example.springdemo.core.entity.Student;
+import com.example.springdemo.core.request.CreateStudentRequest;
+import com.example.springdemo.core.request.InQueryRequest;
+import com.example.springdemo.core.request.UpdateStudentRequest;
+import com.example.springdemo.core.response.StudentResponse;
+import com.example.springdemo.core.service.StudentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,6 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/student")
 public class StudentController {
+
+    Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     StudentService studentService;
 
@@ -73,6 +77,8 @@ public class StudentController {
 
     @GetMapping("/getAll")
     public List<StudentResponse> getAllStudents(){
+//j
+
         List<Student> studentList = studentService.getAllStudents();
         List<StudentResponse> studentResponseList = new ArrayList<>();
 

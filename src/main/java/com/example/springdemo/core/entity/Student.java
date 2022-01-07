@@ -1,11 +1,12 @@
-package com.example.entity;
+package com.example.springdemo.core.entity;
 
-import com.example.request.CreateStudentRequest;
+import com.example.springdemo.core.request.CreateStudentRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,9 +32,12 @@ public class Student {
     @Transient
     private String fullName;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address address ;
+
+    @OneToMany(mappedBy = "student")
+    private List<Subject> learningSubjects;
 
     public Student(CreateStudentRequest createStudentRequest){
         this.firstName = createStudentRequest.getFirstName();

@@ -1,10 +1,11 @@
-package com.example.request;
+package com.example.springdemo.core.request;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,4 +23,6 @@ public class CreateStudentRequest {
     private String street;
 
     private String city;
+
+    private List<CreateSubjectRequest> learningSubjects;
 }

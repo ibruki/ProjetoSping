@@ -1,6 +1,6 @@
-package com.example.repository;
+package com.example.springdemo.core.repository;
 
-import com.example.entity.Address;
+import com.example.springdemo.core.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

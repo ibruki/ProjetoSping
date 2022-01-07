@@ -1,4 +1,4 @@
-package com.example.request;
+package com.example.springdemo.core.request;
 
 import lombok.Data;
 

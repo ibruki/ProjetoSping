@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.springdemo.core.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +25,9 @@ public class Address {
 
     @Column(name = "city")
     private String city;
+
+    @OneToOne(mappedBy = "address")
+    private Student student;
 
     public Address(String street, String city) {
         this.street = street;

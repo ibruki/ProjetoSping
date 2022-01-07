@@ -1,7 +1,7 @@
-package com.example.repository;
+package com.example.springdemo.core.repository;
 
 
-import com.example.entity.Student;
+import com.example.springdemo.core.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
